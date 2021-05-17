@@ -1,0 +1,115 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="IE=edge">
+    <title>template</title>
+    <link href="../../_common/css/style.css" rel="stylesheet" type="text/css">
+    <style>
+        .list {
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+        }
+
+        .list h2 {
+            margin: 0 0 2em 0;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .seminar {
+            float: left;
+            margin: 10px 10px 10px 0;
+            border: 1px solid #23628f;
+            padding: 4px;
+            width: 25%;
+        }
+
+        .check {
+            margin: 0;
+            padding: 8px;
+            font-size: 12px;
+            color: #ffffff;
+            background-color: #23628f;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .red {
+            background-color: #e33a6d;
+        }
+
+        .green {
+            background-color: #7bc52e;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="header-contents">
+            <h1>タイトル</h1>
+            <h2>サブタイトル</h2>
+        </div><!-- /.header-contents -->
+    </header>
+    <div class="main-wrapper">
+        <section>
+            <ul class="list">
+                <li class="seminar" id="one">
+                    <h2>第1会議室</h2>
+                    <p class="check">空き状況を確認</p>
+                </li>
+                <li class="seminar" id="two">
+                    <h2>第2会議室</h2>
+                    <p class="check">空き状況を確認</p>
+                </li>
+                <li class="seminar" id="three">
+                    <h2>第4会議室</h2>
+                    <p class="check">空き状況を確認</p>
+                </li>
+
+            </ul>
+
+        </section>
+    </div><!-- /.main-wrapper -->
+    <footer>JavaScript Samples</footer>
+
+<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script>
+        $(document).ready(function () {
+            //ファイルの読み込み
+            $.ajax({ url: "data.json", dataType: "json" })
+                .done(function (data) { //Jsonのデータがパラメタで渡されている
+                    $(data).each(function () { //順番にファンクションを設定　 $(data)→配列に含まれるすべての項目を取得
+                        if (this.crowded === "yes") {　//this→配列の項目を指す オブジェクトのプロパティを読み取るため、Jqueryに変換必要なし
+                            var idName = "#" + this.id;
+                            $(idName).find(".check").addClass("crowded");
+                        }
+                    });
+                })
+
+                .fail(function () {
+                    window.alert("読み込みエラー");
+                });
+
+
+            //クリックされたら空き席状況を表示
+            $(".check").on("click", function () {
+                if ($(this).hasClass("crowded")) {
+                    $(this).text('残席わずか').addClass("red");
+
+                } else {
+                    $(this).text("空席").addClass("green");
+                }
+
+            });
+
+        });
+
+</script>
+</body>
+</html>
